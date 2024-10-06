@@ -1,0 +1,41 @@
+@startuml
+left to right direction
+actor Aluno
+actor Professor
+actor "Empresa Parceira" as Empresa
+actor Administrador
+actor Sistema
+
+rectangle "Sistema de Mérito Estudantil" {
+  usecase "Cadastrar-se" as UC1
+  usecase "Fazer Login" as UC2
+  usecase "Consultar Extrato" as UC3
+  usecase "Distribuir Moedas" as UC4
+  usecase "Trocar Moedas" as UC5
+  usecase "Cadastrar Vantagens" as UC6
+  usecase "Cadastrar Instituições" as UC7
+  usecase "Pré-cadastrar Professores" as UC8
+  usecase "Adicionar Moedas Semestrais" as UC9
+  usecase "Enviar Notificações" as UC10
+}
+
+Aluno --> UC1
+Aluno --> UC2
+Aluno --> UC3
+Aluno --> UC5
+
+Professor --> UC2
+Professor --> UC3
+Professor --> UC4
+
+Empresa --> UC1
+Empresa --> UC2
+Empresa --> UC6
+
+Administrador --> UC7
+Administrador --> UC8
+
+Sistema --> UC9
+Sistema --> UC10
+
+@enduml

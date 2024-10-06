@@ -1,0 +1,67 @@
+@startuml
+class Usuario {
+  -id: int
+  -nome: String
+  -email: String
+  -senha: String
+  +fazerLogin()
+}
+
+class Aluno {
+  -cpf: String
+  -rg: String
+  -endereco: String
+  -curso: String
+  -saldoMoedas: int
+  +cadastrar()
+  +consultarExtrato()
+  +trocarMoedas()
+}
+
+class Professor {
+  -cpf: String
+  -departamento: String
+  -saldoMoedas: int
+  +distribuirMoedas()
+  +consultarExtrato()
+}
+
+class EmpresaParceira {
+  -cnpj: String
+  +cadastrar()
+  +cadastrarVantagem()
+}
+
+class InstituicaoEnsino {
+  -id: int
+  -nome: String
+}
+
+class Vantagem {
+  -id: int
+  -descricao: String
+  -foto: String
+  -custoMoedas: int
+}
+
+class Transacao {
+  -id: int
+  -data: Date
+  -quantidade: int
+  -motivo: String
+}
+
+Usuario <|-- Aluno
+Usuario <|-- Professor
+Usuario <|-- EmpresaParceira
+
+Aluno "1" -- "1" InstituicaoEnsino : estuda em
+Professor "1" -- "1" InstituicaoEnsino : trabalha em
+
+EmpresaParceira "1" -- "*" Vantagem : oferece
+Aluno "1" -- "*" Vantagem : resgata
+
+Aluno "1" -- "*" Transacao : recebe
+Professor "1" -- "*" Transacao : envia
+
+@enduml
