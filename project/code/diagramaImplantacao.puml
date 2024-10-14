@@ -1,0 +1,51 @@
+@startuml
+node "Servidor de Aplicação" {
+    [Aplicação Rust]
+    [API RESTful]
+    [Camada de Serviços]
+    [Camada de Acesso a Dados (Diesel ORM)]
+    [Sistema de Autenticação]
+    [Gerenciador de Tarefas Assíncronas]
+}
+
+node "Servidor de Banco de Dados" {
+    database "PostgreSQL"
+}
+
+node "Servidor de Cache" {
+    database "Redis"
+}
+
+node "Servidor de Email" {
+    [Serviço de Email]
+}
+
+node "Servidor de Armazenamento" {
+    [Armazenamento de Arquivos]
+}
+
+cloud "Internet" {
+    [Cliente Web]
+    [Aplicativo Mobile]
+}
+
+node "Serviço de Monitoramento" {
+    [Prometheus]
+    [Grafana]
+}
+
+[Cliente Web] ..> [API RESTful] : HTTPS
+[Aplicativo Mobile] ..> [API RESTful] : HTTPS
+[API RESTful] --> [Sistema de Autenticação]
+[API RESTful] --> [Camada de Serviços]
+[Camada de Serviços] --> [Camada de Acesso a Dados (Diesel ORM)]
+[Camada de Acesso a Dados (Diesel ORM)] --> PostgreSQL : TCP
+[Camada de Serviços] --> Redis : TCP
+[Camada de Serviços] --> [Serviço de Email] : SMTP
+[Camada de Serviços] --> [Armazenamento de Arquivos] : API
+[Gerenciador de Tarefas Assíncronas] --> [Camada de Serviços]
+[Aplicação Rust] --> Prometheus : métricas
+
+Prometheus --> Grafana : dados
+
+@enduml

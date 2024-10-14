@@ -1,0 +1,109 @@
+@startuml
+!define TABLE(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define PK(x) <u>x</u>
+!define FK(x) <i>x</i>
+
+TABLE(Usuario, "Usuario") {
+  PK(id): INT
+  nome: VARCHAR
+  email: VARCHAR
+  senha: VARCHAR
+  tipo: ENUM('ALUNO', 'PROFESSOR', 'EMPRESA')
+  data_criacao: TIMESTAMP
+  ultimo_acesso: TIMESTAMP
+}
+
+TABLE(Aluno, "Aluno") {
+  FK(usuario_id): INT
+  cpf: VARCHAR
+  rg: VARCHAR
+  endereco: VARCHAR
+  FK(instituicao_id): INT
+  curso: VARCHAR
+  saldo_moedas: INT
+}
+
+TABLE(Professor, "Professor") {
+  FK(usuario_id): INT
+  cpf: VARCHAR
+  departamento: VARCHAR
+  FK(instituicao_id): INT
+  saldo_moedas: INT
+}
+
+TABLE(EmpresaParceira, "EmpresaParceira") {
+  FK(usuario_id): INT
+  cnpj: VARCHAR
+  descricao: TEXT
+  data_parceria: DATE
+}
+
+TABLE(InstituicaoEnsino, "InstituicaoEnsino") {
+  PK(id): INT
+  nome: VARCHAR
+  endereco: VARCHAR
+  data_parceria: DATE
+}
+
+TABLE(Vantagem, "Vantagem") {
+  PK(id): INT
+  nome: VARCHAR
+  descricao: TEXT
+  foto_url: VARCHAR
+  custo_moedas: INT
+  FK(empresa_id): INT
+  disponivel: BOOLEAN
+  data_criacao: TIMESTAMP
+  data_atualizacao: TIMESTAMP
+}
+
+TABLE(Transacao, "Transacao") {
+  PK(id): INT
+  tipo: ENUM('DISTRIBUICAO', 'RESGATE')
+  data: TIMESTAMP
+  quantidade_moedas: INT
+  motivo: TEXT
+  FK(remetente_id): INT
+  FK(destinatario_id): INT
+  FK(vantagem_id): INT
+}
+
+TABLE(Cupom, "Cupom") {
+  PK(id): INT
+  codigo: VARCHAR
+  FK(transacao_id): INT
+  data_geracao: TIMESTAMP
+  data_uso: TIMESTAMP
+  status: ENUM('GERADO', 'USADO', 'EXPIRADO')
+}
+
+TABLE(Semestre, "Semestre") {
+  PK(id): INT
+  ano: INT
+  periodo: INT
+  data_inicio: DATE
+  data_fim: DATE
+}
+
+TABLE(DistribuicaoMoedas, "DistribuicaoMoedas") {
+  PK(id): INT
+  FK(professor_id): INT
+  FK(semestre_id): INT
+  quantidade: INT
+  data_distribuicao: TIMESTAMP
+}
+
+Usuario "1" -- "0..1" Aluno
+Usuario "1" -- "0..1" Professor
+Usuario "1" -- "0..1" EmpresaParceira
+Aluno "N" -- "1" InstituicaoEnsino
+Professor "N" -- "1" InstituicaoEnsino
+EmpresaParceira "1" -- "N" Vantagem
+Transacao "N" -- "1" Usuario : remetente
+Transacao "N" -- "1" Usuario : destinatario
+Transacao "0..1" -- "0..1" Vantagem
+Transacao "1" -- "0..1" Cupom
+Professor "N" -- "N" Semestre
+(Professor, Semestre) .. DistribuicaoMoedas
+
+@enduml
