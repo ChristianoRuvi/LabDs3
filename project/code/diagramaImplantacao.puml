@@ -1,27 +1,9 @@
 @startuml
 node "Servidor de Aplicação" {
-    [Aplicação Rust]
-    [API RESTful]
-    [Camada de Serviços]
-    [Camada de Acesso a Dados (Diesel ORM)]
-    [Sistema de Autenticação]
-    [Gerenciador de Tarefas Assíncronas]
-}
-
-node "Servidor de Banco de Dados" {
-    database "PostgreSQL"
-}
-
-node "Servidor de Cache" {
-    database "Redis"
-}
-
-node "Servidor de Email" {
-    [Serviço de Email]
-}
-
-node "Servidor de Armazenamento" {
-    [Armazenamento de Arquivos]
+    [Aplicação Node.js (Express)]
+    [APIs RESTful (Alunos, Empresas)]
+    [Configuração Firebase]
+    [Servidor Estático (HTML/CSS/JS)]
 }
 
 cloud "Internet" {
@@ -29,22 +11,34 @@ cloud "Internet" {
     [Aplicativo Mobile]
 }
 
-node "Serviço de Monitoramento" {
-    [Prometheus]
-    [Grafana]
+node "Servidor de Banco de Dados" {
+    database "Firebase"
 }
 
-[Cliente Web] ..> [API RESTful] : HTTPS
-[Aplicativo Mobile] ..> [API RESTful] : HTTPS
-[API RESTful] --> [Sistema de Autenticação]
-[API RESTful] --> [Camada de Serviços]
-[Camada de Serviços] --> [Camada de Acesso a Dados (Diesel ORM)]
-[Camada de Acesso a Dados (Diesel ORM)] --> PostgreSQL : TCP
-[Camada de Serviços] --> Redis : TCP
-[Camada de Serviços] --> [Serviço de Email] : SMTP
-[Camada de Serviços] --> [Armazenamento de Arquivos] : API
-[Gerenciador de Tarefas Assíncronas] --> [Camada de Serviços]
-[Aplicação Rust] --> Prometheus : métricas
+node "Servidor de Email" {
+    [Serviço de Email (Firebase ou outro)]
+}
+
+node "Servidor de Armazenamento" {
+    [Armazenamento de Arquivos]
+}
+
+node "Servidor de Cache" {
+    database "Redis"  // Se o Redis estiver sendo usado, manter; caso contrário, remova ou substitua
+}
+
+node "Serviço de Monitoramento" {
+    [Prometheus]  // Manter se houver monitoramento
+    [Grafana]     // Manter se houver monitoramento
+}
+
+[Cliente Web] ..> [APIs RESTful (Alunos, Empresas)] : HTTPS
+[Aplicativo Mobile] ..> [APIs RESTful (Alunos, Empresas)] : HTTPS
+[APIs RESTful (Alunos, Empresas)] --> [Configuração Firebase]
+[APIs RESTful (Alunos, Empresas)] --> [Servidor Estático (HTML/CSS/JS)]
+[APIs RESTful (Alunos, Empresas)] --> database "Firebase" : API REST
+[APIs RESTful (Alunos, Empresas)] --> [Serviço de Email (Firebase ou outro)] : SMTP
+[APIs RESTful (Alunos, Empresas)] --> [Armazenamento de Arquivos] : API
 
 Prometheus --> Grafana : dados
 
