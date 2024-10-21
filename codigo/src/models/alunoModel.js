@@ -4,14 +4,14 @@ import { collection, addDoc, getDoc, updateDoc, deleteDoc, doc, getDocs } from "
 class AlunoModel {
     static async criar(dados) {
         try {
-            const { nome, email, cpf, rg, endereco, instituicao, curso } = dados;
+            const { nome, email, cpf, rg, endereco, empresa, curso } = dados;
             const alunoData = {
                 nome,
                 email,
                 cpf,
                 rg,
                 endereco,
-                instituicao,
+                empresa,
                 curso,
                 saldoMoedas: 0,
                 dataCadastro: new Date()
