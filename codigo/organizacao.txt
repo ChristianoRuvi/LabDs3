@@ -1,0 +1,41 @@
+projeto-merito/
+│
+├── public/
+│   ├── css/
+│   │   ├── style.css
+│   │   ├── landing.css
+│   │   ├── login.css
+│   │   └── dashboard.css
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── auth.js
+│   │   └── crud.js
+│   ├── images/
+│   ├── index.html
+│   ├── login.html
+│   ├── cadastro.html
+│   ├── dashboard-aluno.html
+│   ├── dashboard-empresa.html
+│   ├── perfil-aluno.html
+│   └── perfil-empresa.html
+│
+├── src/
+│   ├── config/
+│   │   └── firebase.js
+│   ├── controllers/
+│   │   ├── alunoController.js
+│   │   └── empresaController.js
+│   ├── models/
+│   │   ├── alunoModel.js
+│   │   └── empresaModel.js
+│   ├── views/
+│   │   ├── alunoView.js
+│   │   └── empresaView.js
+│   ├── routes/
+│   │   ├── alunoRoutes.js
+│   │   └── empresaRoutes.js
+│   └── app.js
+│
+├── package.json
+├── package-lock.json
+└── README.md

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard da Empresa - Sistema de Mérito</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Dashboard da Empresa</h1>
+        <nav>
+            <ul>
+                <li><a href="perfil-empresa.html">Perfil</a></li>
+                <li><a href="#" id="logoutBtn">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="bemVindo">
+            <h2>Bem-vindo, <span id="nomeEmpresa"></span>!</h2>
+        </section>
+
+        <section id="vantagens">
+            <h3>Vantagens Oferecidas</h3>
+            <ul id="listaVantagens"></ul>
+            <button id="adicionarVantagem">Adicionar Nova Vantagem</button>
+        </section>
+
+        <section id="resgates">
+            <h3>Resgates Recentes</h3>
+            <ul id="listaResgates"></ul>
+        </section>
+    </main>
+
+    <script src="js/auth.js" type="module"></script>
+    <script src="js/crud.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>

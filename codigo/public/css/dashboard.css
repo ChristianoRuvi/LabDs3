@@ -1,0 +1,163 @@
+/* Reset de estilos para maior consistência entre navegadores */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos Globais */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Layout principal */
+main {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+  color: #333;
+}
+
+button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #357ABD;
+}
+
+/* Estilo para formulário */
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+/* Seções de informações no dashboard */
+#saldoMoedas, #extrato, #vantagens {
+  background-color: #e9ecef;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+#bemVindo h2 {
+  font-size: 1.8rem;
+  color: #4a90e2;
+}
+
+#saldoAtual {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #4a90e2;
+  text-align: center;
+}
+
+#extrato ul, #listaVantagens {
+  list-style: none;
+  padding: 0;
+}
+
+#extrato ul li, #listaVantagens li {
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+#excluirConta {
+  background-color: #e74c3c; 
+}
+
+#excluirConta:hover {
+  background-color: #c0392b; 
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  header h1 {
+      font-size: 1.5rem;
+  }
+
+  nav ul li {
+      display: block;
+      margin-bottom: 10px;
+  }
+
+  button {
+      width: 100%;
+  }
+}

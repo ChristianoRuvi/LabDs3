@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil da Empresa - Sistema de Mérito</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Perfil da Empresa</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard-empresa.html">Dashboard</a></li>
+                <li><a href="#" id="logoutBtn">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form id="perfilForm">
+            <div class="form-group">
+                <label for="nome">Nome da Empresa:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" required>
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" required>
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" name="descricao" required></textarea>
+            </div>
+            <button type="submit">Atualizar Perfil</button>
+        </form>
+        <button id="excluirConta">Excluir Conta</button>
+    </main>
+
+    <script src="js/auth.js" type="module"></script>
+    <script src="js/crud.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>
