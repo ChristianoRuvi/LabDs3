@@ -8,8 +8,7 @@ O Sistema de Mérito é uma aplicação web que conecta alunos, professores e em
 - Christiano Ruvieri
 
 ## Orientadores
-- Cristiano
-- Cleiton
+- Cristiano de Macêdo Neto
 
 Antes de começar, certifique-se de ter atendido aos seguintes requisitos:
 
