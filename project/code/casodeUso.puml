@@ -6,7 +6,7 @@ actor "Empresa Parceira" as Empresa
 actor Administrador
 actor Sistema
 
-rectangle "Sistema de Mérito Estudantil" {
+rectangle "Sistema de Mérito Estudantil"  {
   usecase "Cadastrar-se" as UC1
   usecase "Fazer Login" as UC2
   usecase "Consultar Extrato" as UC3
