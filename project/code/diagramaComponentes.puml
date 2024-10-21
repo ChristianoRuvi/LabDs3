@@ -1,0 +1,27 @@
+@startuml
+package "Moeda Estudantil" {
+    [Frontend] --> [Backend]
+    [Backend] --> [Banco de Dados]
+    [Backend] --> [Serviço de Autenticação]
+}
+
+package "Componentes do Frontend" {
+    [Interface de Usuário] --> [API de Serviços]
+    [API de Serviços] --> [Requisições HTTP]
+    [Requisições HTTP] --> [Backend]
+}
+
+package "Componentes do Backend" {
+    [Controle de Usuários] --> [Serviço de Autenticação]
+    [Gerenciamento de Transações] --> [Banco de Dados]
+    [API Restful] --> [Controle de Usuários]
+    [API Restful] --> [Gerenciamento de Transações]
+    [Backend] --> [API Restful]
+}
+
+package "Infraestrutura" {
+    [Banco de Dados] --> [Servidor]
+    [Servidor] --> [Serviço de Autenticação]
+}
+
+@enduml
