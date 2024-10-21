@@ -1,18 +1,60 @@
-# Nome do projeto
-Escreva um ou dois parágrafos resumindo o objetivo do seu projeto.
+# Sistema de Mérito
+O Sistema de Mérito é uma aplicação web que conecta alunos, professores e empresas para reconhecer e recompensar o desempenho acadêmico
 
 ## Integrantes
-- Nome completo do aluno 1
-- Nome completo do aluno 2
-- Nome completo do aluno 3
-- Nome completo do aluno 4
+- Davi Andrade
+- Alexandre Breedveld
+- Breno de Oliveira
+- Christiano Ruvieri
 
 ## Orientadores
-- Nome completo do professor 1
-- Nome completo do professor 2
+- Cristiano
+- Cleiton
 
-## Instruções de utilização
-Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.
+Antes de começar, certifique-se de ter atendido aos seguintes requisitos:
+
+- Node.js (v14 ou superior)
+- npm (geralmente vem com o Node.js)
+- Uma conta e projeto Firebase configurados
+
+## Instalação
+
+1. Clone o repositório:
+   ```
+   git clone
+   cd sistema-de-merito
+   ```
+
+2. Instale as dependências:
+   ```
+   npm install
+   ```
+
+3. Configure o Firebase:
+   - Crie um novo projeto Firebase no Console do Firebase
+   - Ative a Autenticação e o Firestore no seu projeto Firebase
+   - Copie o objeto de configuração do Firebase
+   - Substitua o objeto `firebaseConfig` nos seguintes arquivos com sua configuração:
+     ```javascript:src/config/firebase.js
+
+## Estrutura do Projeto
+
+O projeto está estruturado da seguinte forma:
+
+- `public/`: Contém todos os arquivos frontend (HTML, CSS, JavaScript do lado do cliente)
+- `src/`: Contém os arquivos backend (servidor Node.js/Express, controladores, modelos)
+- `package.json`: Define as dependências e scripts do projeto
+
+## Executando a Aplicação
+
+Para executar a aplicação, siga estes passos:
+
+1. Inicie o servidor:
+   ```
+   npm start
+   ```
+
+2. Abra seu navegador web e acesse `http://localhost:3000`
 
 # Histórias de Usuário - Sistema de Moeda Estudantil
 
