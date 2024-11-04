@@ -3,14 +3,14 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCFM7oN1gFntvJEFF0vl4YUcMA4gyAYaic",
-    authDomain: "moeda-estudantil.firebaseapp.com",
-    projectId: "moeda-estudantil",
-    storageBucket: "moeda-estudantil.appspot.com",
-    messagingSenderId: "282521658357",
-    appId: "1:282521658357:web:f510ed58e6fb5ee8acb6bc",
-    measurementId: "G-KH1TR5Z1N5"
-  };
+  apiKey: "AIzaSyB6t3M3pB1K7_v1BpgGWzcb0mcK96pAn8g",
+  authDomain: "moeda-estudantil-final.firebaseapp.com",
+  projectId: "moeda-estudantil-final",
+  storageBucket: "moeda-estudantil-final.appspot.com",
+  messagingSenderId: "804226385463",
+  appId: "1:804226385463:web:2b66eefe4e40671f2a21b2",
+  measurementId: "G-TT11ZLG44F"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);

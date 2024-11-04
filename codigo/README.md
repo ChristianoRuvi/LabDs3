@@ -37,7 +37,8 @@ Antes de começar, certifique-se de ter atendido aos seguintes requisitos:
    - Crie um novo projeto Firebase no Console do Firebase
    - Ative a Autenticação e o Firestore no seu projeto Firebase
    - Copie o objeto de configuração do Firebase
-   - Substitua o objeto `firebaseConfig` com sua configuração:
+   - Substitua o objeto `firebaseConfig` nos seguintes arquivos com sua configuração:
+     ```javascript:src/config/firebase.js
 
 ## Estrutura do Projeto
 

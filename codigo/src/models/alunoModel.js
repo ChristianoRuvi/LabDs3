@@ -4,14 +4,14 @@ import { collection, addDoc, getDoc, updateDoc, deleteDoc, doc, getDocs } from "
 class AlunoModel {
     static async criar(dados) {
         try {
-            const { nome, email, cpf, rg, endereco, empresa, curso } = dados;
+            const { nome, email, cpf, rg, endereco, instituicao, curso } = dados;
             const alunoData = {
                 nome,
                 email,
                 cpf,
                 rg,
                 endereco,
-                empresa,
+                instituicao,
                 curso,
                 saldoMoedas: 0,
                 dataCadastro: new Date()
@@ -54,18 +54,6 @@ class AlunoModel {
             return true;
         } catch (error) {
             throw new Error('Erro ao excluir aluno: ' + error.message);
-        }
-    }
-
-    static async listarEmpresas() {
-        try {
-            const querySnapshot = await getDocs(collection(db, "empresas"));
-            return querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-        } catch (error) {
-            throw new Error('Erro ao listar empresas: ' + error.message);
         }
     }
 }

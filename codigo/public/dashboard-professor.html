@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Professor - Sistema de Mérito</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <header>
+        <h1>Dashboard do Professor</h1>
+        <nav>
+            <ul>
+                <li><a href="perfil-professor.html">Perfil</a></li>
+                <li><a href="#" id="logoutBtn">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="bemVindo">
+            <h2>Bem-vindo, <span id="nomeProfessor"></span>!</h2>
+        </section>
+
+        <section id="saldoMoedas">
+            <h3>Saldo de Moedas</h3>
+            <p id="saldoAtual"></p>
+        </section>
+
+        <section id="enviarMoedas">
+            <h3>Enviar Moedas</h3>
+            <form id="enviarMoedasForm">
+                <div class="form-group">
+                    <label for="alunoSelect">Selecione o Aluno:</label>
+                    <select id="alunoSelect" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="quantidade">Quantidade de Moedas:</label>
+                    <input type="number" id="quantidade" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="motivo">Motivo:</label>
+                    <textarea id="motivo" required></textarea>
+                </div>
+                <button type="submit">Enviar Moedas</button>
+            </form>
+        </section>
+        <section id="extrato">
+            <h3>Extrato de Transações</h3>
+            <ul id="listaTransacoes"></ul>
+        </section>
+    </main>
+    <script src="js/auth.js" type="module"></script>
+    <script src="js/crud.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+</body>
+
+</html>

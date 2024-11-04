@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+app.get('/data/instituicoes.json', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/data/instituicoes.json'));
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
