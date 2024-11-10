@@ -1,0 +1,53 @@
+@startuml
+actor "Empresa Parceira" as Empresa
+actor "Aluno" as Aluno
+participant "Frontend" as UI
+participant "Sistema" as System
+database "Firestore" as DB
+
+' Cadastro de Vantagens (Empresa)
+group Cadastro de Vantagens
+    Empresa -> UI: Acessa dashboard
+    UI -> System: Verifica autenticação
+    System -> DB: Busca dados da empresa
+    DB --> System: Retorna dados
+    System --> UI: Exibe dashboard
+    
+    Empresa -> UI: Preenche formulário de vantagem
+    Empresa -> UI: Submete formulário
+    UI -> System: criarVantagem(empresaId, dadosVantagem)
+    System -> DB: Adiciona documento na coleção 'vantagens'
+    DB --> System: Confirma criação
+    System --> UI: Retorna sucesso
+    UI --> Empresa: Exibe mensagem de sucesso
+    UI -> System: Recarrega lista de vantagens
+end
+
+' Listagem de Vantagens (Aluno)
+group Listagem de Vantagens
+    Aluno -> UI: Acessa dashboard
+    UI -> System: Verifica autenticação
+    System -> DB: Busca dados do aluno
+    DB --> System: Retorna dados
+    
+    UI -> System: listarVantagens()
+    System -> DB: Consulta coleção 'vantagens'
+    DB --> System: Retorna lista de vantagens
+    System --> UI: Formata dados
+    UI --> Aluno: Exibe vantagens disponíveis
+end
+
+' Resgate de Vantagens (Aluno)
+group Resgate de Vantagens
+    Aluno -> UI: Clica em "Resgatar"
+    UI -> System: resgatarVantagem(alunoId, vantagemId)
+    System -> DB: Verifica saldo do aluno
+    DB --> System: Retorna saldo
+    System -> DB: Atualiza saldo do aluno
+    System -> DB: Registra resgate
+    DB --> System: Confirma operações
+    System --> UI: Retorna sucesso
+    UI --> Aluno: Exibe confirmação
+end
+
+@enduml
