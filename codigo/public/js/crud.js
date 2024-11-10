@@ -1,6 +1,17 @@
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-import { doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    deleteDoc, 
+    collection, 
+    getDocs, 
+    addDoc,
+    query,
+    where 
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyB6t3M3pB1K7_v1BpgGWzcb0mcK96pAn8g",
@@ -126,6 +137,155 @@ export async function listarEmpresas() {
         return empresas;
     } catch (error) {
         console.error('Erro ao listar empresas:', error);
+        throw error;
+    }
+}
+
+export async function criarVantagem(empresaId, dadosVantagem) {
+    try {
+        const vantagemRef = await addDoc(collection(db, 'vantagens'), {
+            empresaId,
+            nome: dadosVantagem.nome,
+            descricao: dadosVantagem.descricao,
+            custo: parseInt(dadosVantagem.custo),
+            imagem: dadosVantagem.imagem,
+            dataCriacao: new Date()
+        });
+        return vantagemRef.id;
+    } catch (error) {
+        console.error('Erro ao criar vantagem:', error);
+        throw error;
+    }
+}
+
+export async function listarVantagens() {
+    try {
+        const querySnapshot = await getDocs(collection(db, 'vantagens'));
+        const vantagens = [];
+        querySnapshot.forEach((doc) => {
+            vantagens.push({ id: doc.id, ...doc.data() });
+        });
+        return vantagens;
+    } catch (error) {
+        console.error('Erro ao listar vantagens:', error);
+        throw error;
+    }
+}
+
+export async function resgatarVantagem(alunoId, vantagemId) {
+    try {
+        const vantagemRef = doc(db, 'vantagens', vantagemId);
+        const alunoRef = doc(db, 'alunos', alunoId);
+        
+        const vantagemDoc = await getDoc(vantagemRef);
+        const alunoDoc = await getDoc(alunoRef);
+        
+        if (!vantagemDoc.exists() || !alunoDoc.exists()) {
+            throw new Error('Vantagem ou aluno não encontrado');
+        }
+
+        const custoVantagem = vantagemDoc.data().custo;
+        const saldoAluno = alunoDoc.data().saldoMoedas || 0;
+
+        if (saldoAluno < custoVantagem) {
+            throw new Error('Saldo insuficiente');
+        }
+
+        // Atualiza saldo do aluno
+        await updateDoc(alunoRef, {
+            saldoMoedas: saldoAluno - custoVantagem
+        });
+
+        // Registra o resgate
+        await addDoc(collection(db, 'resgates'), {
+            alunoId,
+            vantagemId,
+            dataResgate: new Date(),
+            custoResgate: custoVantagem
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Erro ao resgatar vantagem:', error);
+        throw error;
+    }
+}
+
+export async function excluirVantagem(vantagemId) {
+    try {
+        const vantagemRef = doc(db, 'vantagens', vantagemId);
+        await deleteDoc(vantagemRef);
+        return true;
+    } catch (error) {
+        console.error('Erro ao excluir vantagem:', error);
+        throw error;
+    }
+}
+
+export async function atualizarVantagem(vantagemId, dadosVantagem) {
+    try {
+        const vantagemRef = doc(db, 'vantagens', vantagemId);
+        await updateDoc(vantagemRef, {
+            nome: dadosVantagem.nome,
+            descricao: dadosVantagem.descricao,
+            custo: parseInt(dadosVantagem.custo),
+            imagem: dadosVantagem.imagem
+        });
+        return true;
+    } catch (error) {
+        console.error('Erro ao atualizar vantagem:', error);
+        throw error;
+    }
+}
+
+export async function listarResgates(userId, userType) {
+    try {
+        const resgatesRef = collection(db, 'resgates');
+        let querySnapshot;
+        
+        if (userType === 'aluno') {
+            const q = query(resgatesRef, where('alunoId', '==', userId));
+            querySnapshot = await getDocs(q);
+        } else if (userType === 'empresa') {
+            const vantagensSnapshot = await getDocs(
+                query(collection(db, 'vantagens'), where('empresaId', '==', userId))
+            );
+            const vantagensIds = vantagensSnapshot.docs.map(doc => doc.id);
+            
+            if (vantagensIds.length > 0) {
+                const q = query(resgatesRef, where('vantagemId', 'in', vantagensIds));
+                querySnapshot = await getDocs(q);
+            } else {
+                return [];
+            }
+        }
+
+        const resgates = [];
+        for (const docSnapshot of querySnapshot.docs) {
+            const resgate = docSnapshot.data();
+            const vantagemRef = doc(db, 'vantagens', resgate.vantagemId);
+            const vantagemDoc = await getDoc(vantagemRef);
+            const vantagemData = vantagemDoc.data();
+            
+            let alunoData;
+            if (userType === 'empresa') {
+                const alunoRef = doc(db, 'alunos', resgate.alunoId);
+                const alunoDoc = await getDoc(alunoRef);
+                alunoData = alunoDoc.data();
+            }
+
+            resgates.push({
+                id: docSnapshot.id,
+                ...resgate,
+                vantagem: vantagemData,
+                aluno: alunoData,
+                dataResgate: resgate.dataResgate.toDate()
+            });
+        }
+
+        return resgates;
+    } catch (error) {
+        console.error('Erro ao listar resgates:', error);
         throw error;
     }
 }

@@ -1,6 +1,27 @@
 import { auth, db } from './auth.js';
-import { buscarUsuario, atualizarUsuario, excluirUsuario, enviarMoedas } from './crud.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    deleteDoc, 
+    collection, 
+    getDocs, 
+    addDoc,
+    query,
+    where 
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { 
+    buscarUsuario, 
+    atualizarUsuario, 
+    excluirUsuario, 
+    enviarMoedas,
+    criarVantagem,
+    listarVantagens,
+    resgatarVantagem,
+    atualizarVantagem,
+    excluirVantagem,
+    listarResgates,
+} from './crud.js';
 
 const COLLECTIONS = {
     aluno: 'alunos',
@@ -82,6 +103,8 @@ auth.onAuthStateChanged(async (user) => {
         } catch (error) {
             console.error('Erro ao carregar dados:', error);
         }
+        await carregarVantagens();
+        await carregarResgates();
     }
 });
 
@@ -153,4 +176,165 @@ if (excluirContaBtn) {
             }
         }
     });
+}
+
+// Formulário de cadastro de vantagem (Empresa)
+const vantagemForm = document.getElementById('vantagemForm');
+if (vantagemForm) {
+    vantagemForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(vantagemForm);
+        const vantagemData = {};
+        
+        for (const [key, value] of formData.entries()) {
+            vantagemData[key] = value;
+        }
+
+        try {
+            const empresaId = auth.currentUser.uid;
+            await criarVantagem(empresaId, vantagemData);
+            alert('Vantagem cadastrada com sucesso!');
+            vantagemForm.reset();
+            await carregarVantagens();
+        } catch (error) {
+            alert('Erro ao cadastrar vantagem: ' + error.message);
+        }
+    });
+}
+
+async function carregarVantagens() {
+    const listaVantagens = document.getElementById('listaVantagens');
+    if (listaVantagens) {
+        try {
+            const vantagens = await listarVantagens();
+            const userType = localStorage.getItem('userType');
+            const userId = auth.currentUser.uid;
+
+            listaVantagens.innerHTML = vantagens.map(vantagem => `
+                <div class="vantagem-card" id="vantagem-${vantagem.id}">
+                    <img src="${vantagem.imagem}" alt="${vantagem.nome}">
+                    <h4>${vantagem.nome}</h4>
+                    <p>${vantagem.descricao}</p>
+                    <p>Custo: ${vantagem.custo} moedas</p>
+                    ${userType === 'aluno' ? 
+                        `<button onclick="resgatarVantagem('${vantagem.id}')">Resgatar</button>` :
+                        userType === 'empresa' && vantagem.empresaId === userId ?
+                        `<div class="vantagem-acoes">
+                            <button onclick="editarVantagem('${vantagem.id}')">Editar</button>
+                            <button onclick="excluirVantagem('${vantagem.id}')" class="btn-deletar">Excluir</button>
+                         </div>` : 
+                        ''}
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar vantagens:', error);
+        }
+    }
+}
+
+window.resgatarVantagem = async (vantagemId) => {
+    try {
+        const userId = auth.currentUser.uid;
+        await resgatarVantagem(userId, vantagemId);
+        
+        // Get updated user data and update the balance display
+        const userData = await buscarUsuario('aluno', userId);
+        const saldoAtual = document.getElementById('saldoAtual');
+        if (saldoAtual) {
+            saldoAtual.textContent = userData.saldoMoedas;
+        }
+        
+        alert('Vantagem resgatada com sucesso!');
+        await carregarVantagens();
+        await carregarResgates();
+    } catch (error) {
+        alert('Erro ao resgatar vantagem: ' + error.message);
+    }
+};
+
+// Adicionar funções globais para editar e excluir vantagens
+window.editarVantagem = async (vantagemId) => {
+    const vantagemCard = document.getElementById(`vantagem-${vantagemId}`);
+    const vantagens = await listarVantagens();
+    const vantagem = vantagens.find(v => v.id === vantagemId);
+
+    if (vantagem) {
+        vantagemCard.innerHTML = `
+            <form id="editarVantagemForm-${vantagemId}" class="editar-vantagem-form">
+                <input type="text" name="nome" value="${vantagem.nome}" required>
+                <textarea name="descricao" required>${vantagem.descricao}</textarea>
+                <input type="number" name="custo" value="${vantagem.custo}" min="1" required>
+                <input type="url" name="imagem" value="${vantagem.imagem}" required>
+                <div class="form-actions">
+                    <button type="submit">Salvar</button>
+                    <button type="button" onclick="carregarVantagens()">Cancelar</button>
+                </div>
+            </form>
+        `;
+
+        const form = document.getElementById(`editarVantagemForm-${vantagemId}`);
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const dadosAtualizados = Object.fromEntries(formData.entries());
+
+            try {
+                await atualizarVantagem(vantagemId, dadosAtualizados);
+                alert('Vantagem atualizada com sucesso!');
+                await carregarVantagens();
+            } catch (error) {
+                alert('Erro ao atualizar vantagem: ' + error.message);
+            }
+        });
+    }
+};
+
+window.excluirVantagem = async (vantagemId) => {
+    if (confirm('Tem certeza que deseja excluir esta vantagem?')) {
+        try {
+            await excluirVantagem(vantagemId);
+            alert('Vantagem excluída com sucesso!');
+            await carregarVantagens();
+        } catch (error) {
+            alert('Erro ao excluir vantagem: ' + error.message);
+        }
+    }
+};
+
+async function carregarResgates() {
+    const listaResgates = document.getElementById('listaResgates');
+    if (listaResgates) {
+        try {
+            const userType = localStorage.getItem('userType');
+            const userId = auth.currentUser.uid;
+            const resgates = await listarResgates(userId, userType);
+
+            listaResgates.innerHTML = resgates.map(resgate => {
+                const data = resgate.dataResgate.toLocaleDateString();
+                
+                if (userType === 'empresa') {
+                    return `
+                        <li class="resgate-item">
+                            <p>${resgate.aluno.nome} resgatou "${resgate.vantagem.nome}" 
+                            por ${resgate.custoResgate} moedas em ${data}</p>
+                        </li>
+                    `;
+                } else {
+                    return `
+                        <li class="resgate-item">
+                            <p>Você resgatou "${resgate.vantagem.nome}" 
+                            por ${resgate.custoResgate} moedas em ${data}</p>
+                        </li>
+                    `;
+                }
+            }).join('');
+
+            if (resgates.length === 0) {
+                listaResgates.innerHTML = '<li class="resgate-item"><p>Nenhum resgate encontrado.</p></li>';
+            }
+        } catch (error) {
+            console.error('Erro ao carregar resgates:', error);
+        }
+    }
 }
