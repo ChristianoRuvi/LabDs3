@@ -1,0 +1,20 @@
+@startuml
+actor "Aluno" as Aluno
+participant "Frontend" as UI
+participant "Sistema" as System
+database "Firestore" as DB
+
+' Resgate de Vantagens (Aluno)
+group Resgate de Vantagens
+    Aluno -> UI: Clica em "Resgatar"
+    UI -> System: resgatarVantagem(alunoId, vantagemId)
+    System -> DB: Verifica saldo do aluno
+    DB --> System: Retorna saldo
+    System -> DB: Atualiza saldo do aluno
+    System -> DB: Registra resgate
+    DB --> System: Confirma operações
+    System --> UI: Retorna sucesso
+    UI --> Aluno: Exibe confirmação
+end
+
+@enduml
